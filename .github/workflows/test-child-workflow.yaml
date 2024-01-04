@@ -21,19 +21,19 @@ jobs:
       - name: Step 1
         run: |
           echo "Environment: ${{ github.event.inputs.environment }}"
-          echo "Parent Workflow: ${{ github.event.workflow_run.workflow_id }}"
+          echo "Parent Workflow ID: ${{ github.event.workflow_run.workflow_id }}"
           echo "Parent Conclusion: ${{ github.event.workflow_run.conclusion }}"
+          echo "Parent Workflow Name:  ${{ github.event.workflow_run.name }}"
 
       - name: Conditional Step 1
         if: |
           github.event.inputs.environment == 'staging' ||
           (github.event.workflow_run.workflow_id == 'Parent Workflow' && github.event.workflow_run.conclusion == 'success')
         run: |
-          echo "Conditional Step 1"
-          ONE="${{ github.event.workflow_run.workflow_id == 'Parent Workflow' }}"
-          TWO="${{ github.event.workflow_run.conclusion == 'success' }}"
-          echo "First condition: $ONE"
-          echo "Second condition: $TWO"
+          echo "Conditional Step 2"
+          echo "Id match: ${{ github.event.workflow_run.workflow_id == 'Parent Workflow' }}"
+          echo "Name match: ${{ github.event.workflow_run.name == 'Parent Workflow' }}"
+          echo "Conclusion match: ${{ github.event.workflow_run.conclusion == 'success' }}"
 
       - name: Conditional Step 2
         if: |
@@ -41,7 +41,6 @@ jobs:
           (${{ github.event.workflow_run.workflow_id }} == 'Parent Workflow' && ${{ github.event.workflow_run.conclusion }} == 'success')
         run: |
           echo "Conditional Step 2"
-          ONE="${{ github.event.workflow_run.workflow_id == 'Parent Workflow' }}"
-          TWO="${{ github.event.workflow_run.conclusion == 'success' }}"
-          echo "First condition: $ONE"
-          echo "Second condition: $TWO"
+          echo "Id match: ${{ github.event.workflow_run.workflow_id == 'Parent Workflow' }}"
+          echo "Name match: ${{ github.event.workflow_run.name == 'Parent Workflow' }}"
+          echo "Conclusion match: ${{ github.event.workflow_run.conclusion == 'success' }}"
