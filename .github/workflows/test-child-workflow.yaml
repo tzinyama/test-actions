@@ -37,8 +37,7 @@ jobs:
 
       - name: Conditional Step 2
         if: |
-          ${{ github.event.inputs.environment == 'staging' }} ||
-          (${{ github.event.workflow_run.workflow_id }} == 'Parent Workflow' && ${{ github.event.workflow_run.conclusion }} == 'success')
+          ${{ github.event.workflow_run.workflow_id }} == 'Parent Workflow' && ${{ github.event.workflow_run.conclusion }} == 'success'
         run: |
           echo "Conditional Step 2"
           echo "Id match: ${{ github.event.workflow_run.workflow_id == 'Parent Workflow' }}"
