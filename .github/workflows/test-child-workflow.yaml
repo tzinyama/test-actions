@@ -1,0 +1,47 @@
+name: Child Workflow
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        options:
+          - staging
+          - prod
+        required: true
+
+  workflow_run:
+    workflows: ["Parent Workflow"]
+    types:
+      - completed
+
+jobs:
+  child_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step 1
+        run: |
+          echo "Environment: ${{ github.event.inputs.environment }}"
+          echo "Parent Workflow: ${{ github.event.workflow_run.workflow_id }}"
+          echo "Parent Conclusion: ${{ github.event.workflow_run.conclusion }}"
+
+      - name: Conditional Step 1
+        if: |
+          github.event.inputs.environment == 'staging' ||
+          (github.event.workflow_run.workflow_id == 'Parent Workflow' && github.event.workflow_run.conclusion == 'success')
+        run: |
+          echo "Conditional Step 1"
+          ONE="${{ github.event.workflow_run.workflow_id == 'Parent Workflow' }}"
+          TWO="${{ github.event.workflow_run.conclusion == 'success' }}"
+          echo "First condition: $ONE"
+          echo "Second condition: $TWO"
+
+      - name: Conditional Step 2
+        if: |
+          ${{ github.event.inputs.environment == 'staging' }} ||
+          (${{ github.event.workflow_run.workflow_id }} == 'Parent Workflow' && ${{ github.event.workflow_run.conclusion }} == 'success')
+        run: |
+          echo "Conditional Step 2"
+          ONE="${{ github.event.workflow_run.workflow_id == 'Parent Workflow' }}"
+          TWO="${{ github.event.workflow_run.conclusion == 'success' }}"
+          echo "First condition: $ONE"
+          echo "Second condition: $TWO"

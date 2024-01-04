@@ -1,0 +1,11 @@
+name: Parent Workflow
+on:
+  workflow_dispatch:
+
+jobs:
+  parent_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Parent Step
+        run: |
+          echo "I did a thing coz I'm the parent."
